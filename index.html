@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masjid Finder</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Add Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
+    <script>
+        // Initialize Supabase directly
+        try {
+            if (typeof supabase === 'undefined') {
+                throw new Error('Supabase library not loaded');
+            }
+            
+            if (!supabase.createClient) {
+                throw new Error('Supabase createClient not found');
+            }
+
+            window.supabase = supabase.createClient(
+                'https://hadqyixmtphlxjvincqe.supabase.co',
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhZHF5aXhtdHBobHhqdmluY3FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MDE5ODIsImV4cCI6MjA2NDA3Nzk4Mn0.O7ceQ-pOmXaSPs7saIF7ZWmtqClVjyuZ7v0MInOlS1M'
+            );
+
+            // Test the connection
+            window.supabase.from('masjids').select('count').then(({ data, error }) => {
+                if (error) {
+                    console.error('Database connection test failed:', error);
+                } else {
+                    console.log('Database connection successful');
+                }
+            });
+        } catch (error) {
+            console.error('Failed to initialize Supabase:', error);
+            alert('Failed to connect to database. Please refresh the page.');
+        }
+    </script>
+    <!-- Load app.js after Supabase is initialized -->
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Masjid Finder</h1>
+            <div class="nav-links">
+                <a href="index.html" class="active">Find Masjid</a>
+                <a href="add-masjid.html">Add Masjid</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="search-section">
+            <h2>Prayer Times</h2>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search for masjids..." list="masjidSuggestions" autocomplete="off">
+                <datalist id="masjidSuggestions"></datalist>
+                <button onclick="searchMasjid()">Search</button>
+            </div>
+            <div class="action-buttons">
+                <button onclick="window.location.href='add-masjid.html'" class="secondary-btn">Add New Masjid</button>
+                <button onclick="showAllMasjids()" class="secondary-btn">Show All Masjids</button>
+            </div>
+        </div>
+
+        <div id="searchResults" class="results-section">
+            <!-- Search results will be displayed here -->
+        </div>
+    </main>
+
+    <footer class="footer-credit">
+        Made with ❤️ by Umair Shaikh
+    </footer>
+</body>
+</html> 
